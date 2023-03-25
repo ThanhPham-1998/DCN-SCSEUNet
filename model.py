@@ -230,7 +230,7 @@ def final_block(in_channels, out_channels):
 
 
 class SCSEUNet(nn.Module):
-    def __init__(self, num_classes=2, activation = 'softmax', r=1, dcn=False) -> None:
+    def __init__(self, num_classes=2, activation = None, r=1, dcn=False) -> None:
         super().__init__()
         self.dcn = dcn
         self.activation = activation
@@ -357,10 +357,10 @@ class SCSEUNet(nn.Module):
         final_layer = self.final_layer(decode_block1)
 
         if self.activation == "softmax":
-            out = final_layer.softmax(dim=1)  # Can be annotated, according to the situation
+            final_layer = final_layer.softmax(dim=1)  # Can be annotated, according to the situation
         elif self.activation == "sigmoid":
-            out = final_layer.sigmoid()
-        return out
+            final_layer = final_layer.sigmoid()
+        return final_layer
 
 if __name__ == "__main__":
     x = torch.rand(3, 3, 224, 224)
